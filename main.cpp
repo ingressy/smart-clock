@@ -68,6 +68,7 @@ void setup() {
   timeClient.update();
 
   delay(1000);
+  lcd.clear();
 
   auto timeZoneOffsetHours = 2;
   auto unixTime = timeClient.getEpochTime() + (timeZoneOffsetHours * 3600);
@@ -77,7 +78,7 @@ void setup() {
   RTC.setTime(timeToSet);
 }
 
-void loop() {
+void temp() {
   int Luftfeuchtigkeit = dht.readHumidity();
   int Temperatur = dht.readTemperature();
 
@@ -90,11 +91,11 @@ void loop() {
   lcd.setCursor(0, 1);
   lcd.print(Temperatur);
   lcd.print("C Temp.");
+}
 
-  delay(5000);
+void loop() {
   RTCTime currentTime;
   RTC.getTime(currentTime);
-  lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print(currentTime.getHour());
   lcd.print(":");
@@ -108,6 +109,4 @@ void loop() {
   lcd.print(Month2int(currentTime.getMonth()));
   lcd.print("/");
   lcd.print(currentTime.getYear());
-  delay(6000);
-
 }
