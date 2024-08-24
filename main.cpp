@@ -12,7 +12,9 @@
 #define SECRET_SSID "xxx" //network name
 #define SECRET_PASS "xxx" //network password
 
-int ErrorLED = 7;
+const int ErrorLED = 6;
+int x = 7;
+int val=0, men=0;
 
 char ssid[] = SECRET_SSID;
 char pass[] = SECRET_PASS;
@@ -53,12 +55,14 @@ void connectToWiFi() {
 void setup() {
   Serial.begin(9600);
 
+  pinMode(ErrorLED, OUTPUT);
+
   lcd.begin(16, 2);
   lcd.clear();
 
   dht.begin();
 
-  lcd.print("mcat v0.2");
+  lcd.print("m-cat v0.3");
   lcd.setCursor(0, 1);
   lcd.print("booting ...");
 
@@ -69,6 +73,10 @@ void setup() {
 
   delay(1000);
   lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("     -meow");
+  lcd.setCursor(1, 1);
+  lcd.print("i am hungry ^^");
 
   auto timeZoneOffsetHours = 2;
   auto unixTime = timeClient.getEpochTime() + (timeZoneOffsetHours * 3600);
@@ -82,31 +90,76 @@ void temp() {
   int Luftfeuchtigkeit = dht.readHumidity();
   int Temperatur = dht.readTemperature();
 
-  delay(1000);
   lcd.clear();
   lcd.setCursor(0, 0);
+  lcd.print("Humidity:   ");
   lcd.print(Luftfeuchtigkeit);
-  lcd.print("% Luftf.");
+  lcd.print("%");
 
   lcd.setCursor(0, 1);
+  lcd.print("Temperatur: ");
   lcd.print(Temperatur);
-  lcd.print("C Temp.");
+  lcd.print("\337C");
 }
 
-void loop() {
+void rtc() {
+  auto timeZoneOffsetHours = 2;
+  auto unixTime = timeClient.getEpochTime() + (timeZoneOffsetHours * 3600);
+  RTCTime timeToSet = RTCTime(unixTime);
+  RTC.setTime(timeToSet);
   RTCTime currentTime;
   RTC.getTime(currentTime);
+
+  lcd.clear();
   lcd.setCursor(0, 0);
+  lcd.print("Zeit:  ");
   lcd.print(currentTime.getHour());
   lcd.print(":");
-  lcd.print(currentTime.getMinutes());
-  lcd.print(":");
-  lcd.print(currentTime.getSeconds());
+  if (currentTime.getMinutes() < 10) {
+    lcd.setCursor(9, 0);
+    lcd.print("0");
+    lcd.print(currentTime.getMinutes());
+    }
+  else {
+    lcd.print(currentTime.getMinutes());
+
+  }
 
   lcd.setCursor(0, 1);
+  lcd.print("Datum: ");
   lcd.print(currentTime.getDayOfMonth());
-  lcd.print("/");
+  lcd.print(".");
   lcd.print(Month2int(currentTime.getMonth()));
-  lcd.print("/");
+  lcd.print(".");
   lcd.print(currentTime.getYear());
+}
+void loop() {
+  val=digitalRead(x);
+  if(val==1){
+    men=men+1;
+  }
+  
+  if (men==1){
+    rtc();
+  }
+  else if (men==2){
+    temp();
+  }
+  else if (men==3){
+    lcd.clear();
+    lcd.setCursor(0,0); 
+    lcd.print(" Mode 3 ");
+  }
+
+  else if (men==4){
+    lcd.clear();
+    lcd.setCursor(0,0); 
+    lcd.print("m-cat v0.3");
+    lcd.setCursor(0,1); 
+    lcd.print("by ingressy");
+    men=1;
+  }
+
+  //wait 300 ms for the next reading
+  delay(30); 
 }
