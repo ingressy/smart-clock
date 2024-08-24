@@ -80,8 +80,6 @@ void setup() {
 
   auto timeZoneOffsetHours = 2;
   auto unixTime = timeClient.getEpochTime() + (timeZoneOffsetHours * 3600);
-  Serial.print("Unix time = ");
-  Serial.println(unixTime);
   RTCTime timeToSet = RTCTime(unixTime);
   RTC.setTime(timeToSet);
 }
@@ -104,6 +102,13 @@ void temp() {
 
 void rtc() {
   timeClient.update();
+  auto timeZoneOffsetHours = 2;
+  auto unixTime = timeClient.getEpochTime() + (timeZoneOffsetHours * 3600);
+  Serial.print("Unix time = ");
+  Serial.println(unixTime);
+  RTCTime timeToSet = RTCTime(unixTime);
+  RTC.setTime(timeToSet);
+
   RTCTime currentTime;
   RTC.getTime(currentTime);
 
@@ -113,7 +118,7 @@ void rtc() {
   lcd.print(currentTime.getHour());
   lcd.print(":");
   if (currentTime.getMinutes() < 10) {
-    lcd.setCursor(10, 0);
+    lcd.setCursor(9, 0);
     lcd.print("0");
     lcd.print(currentTime.getMinutes());
   }
@@ -147,6 +152,7 @@ void rtc() {
   lcd.print(".");
   lcd.print(currentTime.getYear());
 }
+
 void loop() {
   val=digitalRead(x);
   if(val==1){
