@@ -9,8 +9,8 @@
 //port für temp
 #define DHTPIN 13
 #define DHTTYPE DHT11
-#define SECRET_SSID "xxx" //network name
-#define SECRET_PASS "xxx" //network password
+#define SECRET_SSID "ourprivatehomelan" //network name
+#define SECRET_PASS "ThisIs4OurPrivateHomeLAN" //network password
 
 const int ErrorLED = 6;
 int x = 7;
@@ -97,39 +97,53 @@ void temp() {
   lcd.print("%");
 
   lcd.setCursor(0, 1);
-  lcd.print("Temperatur: ");
+  lcd.print("Temperature:");
   lcd.print(Temperatur);
   lcd.print("\337C");
 }
 
 void rtc() {
-  auto timeZoneOffsetHours = 2;
-  auto unixTime = timeClient.getEpochTime() + (timeZoneOffsetHours * 3600);
-  RTCTime timeToSet = RTCTime(unixTime);
-  RTC.setTime(timeToSet);
+  timeClient.update();
   RTCTime currentTime;
   RTC.getTime(currentTime);
 
   lcd.clear();
   lcd.setCursor(0, 0);
-  lcd.print("Zeit:  ");
+  lcd.print("Time: ");
   lcd.print(currentTime.getHour());
   lcd.print(":");
   if (currentTime.getMinutes() < 10) {
-    lcd.setCursor(9, 0);
+    lcd.setCursor(10, 0);
     lcd.print("0");
     lcd.print(currentTime.getMinutes());
-    }
+  }
   else {
     lcd.print(currentTime.getMinutes());
 
   }
+  lcd.print(":");
+  if (currentTime.getSeconds() < 10) {
+      lcd.setCursor(12, 0);
+      lcd.print("0");
+      lcd.print(currentTime.getSeconds());
+  }
+  else {
+    lcd.print(currentTime.getSeconds());
+  }
+  
 
   lcd.setCursor(0, 1);
-  lcd.print("Datum: ");
+  lcd.print("Date: ");
   lcd.print(currentTime.getDayOfMonth());
   lcd.print(".");
-  lcd.print(Month2int(currentTime.getMonth()));
+  if (Month2int(currentTime.getMonth()) < 10) {
+    lcd.setCursor(9, 1);
+    lcd.print("0");
+    lcd.print(Month2int(currentTime.getMonth()));
+  }
+  else {
+    lcd.print(Month2int(currentTime.getMonth()));
+  }
   lcd.print(".");
   lcd.print(currentTime.getYear());
 }
@@ -148,7 +162,7 @@ void loop() {
   else if (men==3){
     lcd.clear();
     lcd.setCursor(0,0); 
-    lcd.print(" Mode 3 ");
+    lcd.print("COMMING SOON");
   }
 
   else if (men==4){
