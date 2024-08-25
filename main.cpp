@@ -9,12 +9,14 @@
 //port für temp
 #define DHTPIN 13
 #define DHTTYPE DHT11
-#define SECRET_SSID "ourprivatehomelan" //network name
-#define SECRET_PASS "ThisIs4OurPrivateHomeLAN" //network password
+#define SECRET_SSID "xxx" //network name
+#define SECRET_PASS "xxx" //network password
 
-const int ErrorLED = 6;
-int x = 7;
-int val=0, men=0;
+int LED = 6;
+int forwPin = 7;
+//int backPin = 9;
+int men = 0;
+int start = 0;
 
 char ssid[] = SECRET_SSID;
 char pass[] = SECRET_PASS;
@@ -41,7 +43,7 @@ void printWiFiStatus() {
 
 void connectToWiFi() {
   if (WiFi.status() == WL_NO_MODULE) {
-    digitalWrite(ErrorLED, HIGH);
+    digitalWrite(LED, HIGH);
     while (true);
   }
 
@@ -55,7 +57,8 @@ void connectToWiFi() {
 void setup() {
   Serial.begin(9600);
 
-  pinMode(ErrorLED, OUTPUT);
+  pinMode(LED, OUTPUT);
+  pinMode(forwPin, INPUT);
 
   lcd.begin(16, 2);
   lcd.clear();
@@ -77,6 +80,7 @@ void setup() {
   lcd.print("     -meow");
   lcd.setCursor(1, 1);
   lcd.print("i am hungry ^^");
+  digitalWrite(LED, HIGH);
 
   auto timeZoneOffsetHours = 2;
   auto unixTime = timeClient.getEpochTime() + (timeZoneOffsetHours * 3600);
@@ -98,14 +102,13 @@ void temp() {
   lcd.print("Temperature:");
   lcd.print(Temperatur);
   lcd.print("\337C");
+  delay(350);
 }
 
 void rtc() {
   timeClient.update();
   auto timeZoneOffsetHours = 2;
   auto unixTime = timeClient.getEpochTime() + (timeZoneOffsetHours * 3600);
-  Serial.print("Unix time = ");
-  Serial.println(unixTime);
   RTCTime timeToSet = RTCTime(unixTime);
   RTC.setTime(timeToSet);
 
@@ -115,7 +118,14 @@ void rtc() {
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("Time: ");
-  lcd.print(currentTime.getHour());
+  if (currentTime.getHour() < 10) {
+    lcd.setCursor(6, 0);
+    lcd.print("0");
+    lcd.print(currentTime.getHour());
+  }
+  else {
+    lcd.print(currentTime.getHour());
+  }
   lcd.print(":");
   if (currentTime.getMinutes() < 10) {
     lcd.setCursor(9, 0);
@@ -124,7 +134,6 @@ void rtc() {
   }
   else {
     lcd.print(currentTime.getMinutes());
-
   }
   lcd.print(":");
   if (currentTime.getSeconds() < 10) {
@@ -151,35 +160,52 @@ void rtc() {
   }
   lcd.print(".");
   lcd.print(currentTime.getYear());
+  delay(350);
 }
 
-void loop() {
-  val=digitalRead(x);
-  if(val==1){
-    men=men+1;
-  }
-  
-  if (men==1){
+void menu() {
+  if (men == 1) {
+    if (start == 0) {
+        digitalWrite(LED, LOW);
+    }
     rtc();
-  }
-  else if (men==2){
+  } else if (men == 2) {
     temp();
-  }
-  else if (men==3){
+  } else if (men == 3) {
     lcd.clear();
     lcd.setCursor(0,0); 
     lcd.print("COMMING SOON");
-  }
-
-  else if (men==4){
+    delay(350);
+  } else if (men == 4) {
     lcd.clear();
     lcd.setCursor(0,0); 
     lcd.print("m-cat v0.3");
     lcd.setCursor(0,1); 
     lcd.print("by ingressy");
-    men=1;
+    delay(350);
   }
+}
 
-  //wait 300 ms for the next reading
-  delay(30); 
+void loop() {
+  menu();
+  if (digitalRead(forwPin)) {
+    if (men == 0) {
+      men = 1;
+    } else if (men == 1) {
+      men = 2;
+    } else if (men == 2) {
+      men = 3;
+    } else if (men == 3) {
+      men = 4;
+    } else if (men == 4) {
+      men = 1;
+    }
+  } //else if (digitalRead(backPin)) {
+      //  if (men == 0) {
+      //men = 2;
+    //} else if (men == 1) {
+      //men = 0;
+    //} else if (men == 2) {
+      //men = 1;
+    //}
 }
