@@ -8,3 +8,6 @@ here: [Circuit Diagramm](https://github.com/ingressy/m-cat/blob/main/m-cat.pdf)
 ### v0.3
 - add lcd menu
 - add the forwButton
+
+### v0.2
+- add time over wifi
