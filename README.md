@@ -8,6 +8,9 @@ Text Comming soon
 here: [Circuit Diagramm](https://github.com/ingressy/m-cat/blob/main/m-cat.pdf)
 
 ## Changelog
+### v0.4 DEV
+- turns the mled on by under 20°C
+
 ### v0.3
 - add lcd menu
 - add the forwButton
