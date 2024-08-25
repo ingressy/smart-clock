@@ -17,6 +17,7 @@ int forwPin = 7;
 //int backPin = 9;
 int men = 0;
 int start = 0;
+char LED1 = HIGH;
 
 char ssid[] = SECRET_SSID;
 char pass[] = SECRET_PASS;
@@ -38,7 +39,7 @@ void printWiFiStatus() {
   lcd.setCursor(0, 1);
   IPAddress ip = WiFi.localIP();
   lcd.print(ip);
-  delay(3000);
+  delay(2000);
 }
 
 void connectToWiFi() {
@@ -65,7 +66,7 @@ void setup() {
 
   dht.begin();
 
-  lcd.print("m-cat v0.3");
+  lcd.print("m-cat v0.4 DEV");
   lcd.setCursor(0, 1);
   lcd.print("booting ...");
 
@@ -167,6 +168,7 @@ void menu() {
   if (men == 1) {
     if (start == 0) {
         digitalWrite(LED, LOW);
+        start = 1;
     }
     rtc();
   } else if (men == 2) {
@@ -174,20 +176,52 @@ void menu() {
   } else if (men == 3) {
     lcd.clear();
     lcd.setCursor(0,0); 
-    lcd.print("COMMING SOON");
+    lcd.print("Weather Bremen");
+    lcd.setCursor(0, 1);
+    lcd.print("Temperature:na\337C");
     delay(350);
-  } else if (men == 4) {
+    } else if (men == 4) {
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.write("Wind Speed:naBft");
+    lcd.setCursor(0,1); 
+    lcd.write("Gusts:     naBft");
+    delay(350);
+  } else if (men == 5) {
     lcd.clear();
     lcd.setCursor(0,0); 
-    lcd.print("m-cat v0.3");
+    lcd.print("m-cat v0.4 DEV");
     lcd.setCursor(0,1); 
     lcd.print("by ingressy");
     delay(350);
   }
 }
-
+void mled() {
+  if (dht.readTemperature() < 20) {
+    digitalWrite(LED, HIGH);
+    if (LED1 == HIGH) {
+      LED1 = LOW;
+      digitalWrite(LED, LOW);
+    } else if (LED1 == LOW) {
+      LED1 = HIGH;
+      digitalWrite(LED, HIGH);
+    }
+  }
+  if (dht.readTemperature() > 30) {
+    digitalWrite(LED, HIGH);
+    if (LED1 == HIGH) {
+      LED1 = LOW;
+      digitalWrite(LED, LOW);
+    } else if (LED1 == LOW) {
+      LED1 = HIGH;
+      digitalWrite(LED, HIGH);
+    }
+  }
+}
 void loop() {
   menu();
+  mled();
+
   if (digitalRead(forwPin)) {
     if (men == 0) {
       men = 1;
@@ -198,6 +232,8 @@ void loop() {
     } else if (men == 3) {
       men = 4;
     } else if (men == 4) {
+      men = 5;
+    } else if (men == 5) {
       men = 1;
     }
   } //else if (digitalRead(backPin)) {
