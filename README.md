@@ -13,6 +13,7 @@ here: [Circuit Diagramm](https://github.com/ingressy/m-cat/blob/main/m-cat.pdf)
 - turns the m-led on by over 30°C Room Temperature
 - add weather lcd menu point
 - add wind speed lcd menu point
+- add more comments
 
 ### v0.3
 - add lcd menu
