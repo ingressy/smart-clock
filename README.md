@@ -20,3 +20,7 @@ here: [Circuit Diagramm](https://github.com/ingressy/m-cat/blob/main/m-cat.pdf)
 
 ### v0.2
 - add time over wifi
+
+### v0.1
+- add display
+- add temp sensor
