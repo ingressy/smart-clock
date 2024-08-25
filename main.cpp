@@ -1,4 +1,4 @@
-//biblo
+//lib
 #include "DHT.h"
 #include "RTC.h"
 #include <LiquidCrystal.h>
@@ -6,11 +6,13 @@
 #include <WiFiS3.h>
 #include <WiFiUdp.h>
 
-//port für temp
+//port for temp
 #define DHTPIN 13
 #define DHTTYPE DHT11
-#define SECRET_SSID "xxx" //network name
-#define SECRET_PASS "xxx" //network password
+
+//wifi name and pass
+#define SECRET_SSID "xxx"
+#define SECRET_PASS "xxx"
 
 int LED = 6;
 int forwPin = 7;
@@ -56,8 +58,7 @@ void connectToWiFi() {
 }
 
 void setup() {
-  Serial.begin(9600);
-
+  //pinModes 
   pinMode(LED, OUTPUT);
   pinMode(forwPin, INPUT);
 
@@ -66,10 +67,12 @@ void setup() {
 
   dht.begin();
 
+  //start screen
   lcd.print("m-cat v0.4 DEV");
   lcd.setCursor(0, 1);
   lcd.print("booting ...");
 
+  //wifi and rtc
   connectToWiFi();
   RTC.begin();
   timeClient.begin();
@@ -83,6 +86,7 @@ void setup() {
   lcd.print("i am hungry ^^");
   digitalWrite(LED, HIGH);
 
+  //rtc time
   auto timeZoneOffsetHours = 2;
   auto unixTime = timeClient.getEpochTime() + (timeZoneOffsetHours * 3600);
   RTCTime timeToSet = RTCTime(unixTime);
@@ -107,6 +111,7 @@ void temp() {
 }
 
 void rtc() {
+  //repeat ntp update because the rtc clock goes strange
   timeClient.update();
   auto timeZoneOffsetHours = 2;
   auto unixTime = timeClient.getEpochTime() + (timeZoneOffsetHours * 3600);
@@ -119,6 +124,8 @@ void rtc() {
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("Time: ");
+
+  //add nill
   if (currentTime.getHour() < 10) {
     lcd.setCursor(6, 0);
     lcd.print("0");
@@ -196,6 +203,7 @@ void menu() {
     delay(350);
   }
 }
+//code for the yellow led
 void mled() {
   if (dht.readTemperature() < 20) {
     digitalWrite(LED, HIGH);
