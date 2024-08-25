@@ -1,6 +1,9 @@
 # m~cat
 the mircocontrolled smart thing cat
 
+## build your own m~cat
+Text Comming soon
+
 ## Circuit Diagram
 here: [Circuit Diagramm](https://github.com/ingressy/m-cat/blob/main/m-cat.pdf)
 
