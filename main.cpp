@@ -225,10 +225,30 @@ void mled() {
       digitalWrite(LED, HIGH);
     }
   }
+  //disable led
+  if (dht.readTemperature() < 30) {
+    digitalWrite(LED, LOW);
+  }
+  if (dht.readTemperature() > 20) {
+    if (dht.readTemperature() > 30) {
+      digitalWrite(LED, HIGH);
+      if (LED1 == HIGH) {
+        LED1 = LOW;
+        digitalWrite(LED, LOW);
+      } else if (LED1 == LOW) {
+        LED1 = HIGH;
+        digitalWrite(LED, HIGH);
+      } else {
+        digitalWrite(LED, LOW);
+      }
+    }
+  }
 }
 void loop() {
   menu();
-  mled();
+  if (start == 1) {
+    mled();
+  }
 
   if (digitalRead(forwPin)) {
     if (men == 0) {
