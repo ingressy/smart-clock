@@ -11,8 +11,8 @@
 #define DHTTYPE DHT11
 
 //wifi name and pass
-#define SECRET_SSID "ourprivatehomelan"
-#define SECRET_PASS "ThisIs4OurPrivateHomeLAN"
+#define SECRET_SSID "xxx"
+#define SECRET_PASS "xxx"
 
 int LED = 6;
 int forwPin = 7;
