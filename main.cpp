@@ -11,15 +11,17 @@
 #define DHTTYPE DHT11
 
 //wifi name and pass
-#define SECRET_SSID "xxx"
-#define SECRET_PASS "xxx"
+#define SECRET_SSID "ourprivatehomelan"
+#define SECRET_PASS "ThisIs4OurPrivateHomeLAN"
 
 int LED = 6;
 int forwPin = 7;
-//int backPin = 9;
+int okPin = 8;
+int backPin = 9;
 int men = 0;
 int start = 0;
 char LED1 = HIGH;
+int led_bli = 0;
 
 char ssid[] = SECRET_SSID;
 char pass[] = SECRET_PASS;
@@ -32,6 +34,7 @@ NTPClient timeClient(Udp);
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 
 DHT dht(DHTPIN, DHTTYPE);
+
 
 void printWiFiStatus() {
   lcd.clear();
@@ -61,6 +64,8 @@ void setup() {
   //pinModes 
   pinMode(LED, OUTPUT);
   pinMode(forwPin, INPUT);
+  pinMode(okPin, INPUT);
+  pinMode(backPin, INPUT);
 
   lcd.begin(16, 2);
   lcd.clear();
@@ -205,7 +210,7 @@ void menu() {
 }
 //code for the yellow led
 void mled() {
-  if (dht.readTemperature() < 20) {
+  if (led_bli == 1) {
     digitalWrite(LED, HIGH);
     if (LED1 == HIGH) {
       LED1 = LOW;
@@ -213,34 +218,28 @@ void mled() {
     } else if (LED1 == LOW) {
       LED1 = HIGH;
       digitalWrite(LED, HIGH);
+    } else {
+      LED1 = HIGH;
     }
+  } else if (led_bli == 0) {
+    digitalWrite(LED, LOW);
+  }
+
+  if (dht.readTemperature() < 20) {
+    led_bli = 1;
   }
   if (dht.readTemperature() > 30) {
-    digitalWrite(LED, HIGH);
-    if (LED1 == HIGH) {
-      LED1 = LOW;
-      digitalWrite(LED, LOW);
-    } else if (LED1 == LOW) {
-      LED1 = HIGH;
-      digitalWrite(LED, HIGH);
-    }
+    led_bli = 1;
   }
   //disable led
   if (dht.readTemperature() < 30) {
-    digitalWrite(LED, LOW);
+    led_bli = 0;
   }
   if (dht.readTemperature() > 20) {
     if (dht.readTemperature() > 30) {
-      digitalWrite(LED, HIGH);
-      if (LED1 == HIGH) {
-        LED1 = LOW;
-        digitalWrite(LED, LOW);
-      } else if (LED1 == LOW) {
-        LED1 = HIGH;
-        digitalWrite(LED, HIGH);
-      } else {
-        digitalWrite(LED, LOW);
-      }
+      led_bli = 1;
+    } else {
+      led_bli = 0;
     }
   }
 }
@@ -264,12 +263,23 @@ void loop() {
     } else if (men == 5) {
       men = 1;
     }
-  } //else if (digitalRead(backPin)) {
-      //  if (men == 0) {
-      //men = 2;
-    //} else if (men == 1) {
-      //men = 0;
-    //} else if (men == 2) {
-      //men = 1;
-    //}
+  } else  if (digitalRead(okPin)) {
+    if (men == 0) {
+      men = 1; 
+    }
+  } else if (digitalRead(backPin)) {
+    if (men == 0) {
+      men = 1; 
+    } else if (men == 1) {
+      men = 5;
+    } else if (men == 5) {
+      men = 4;
+    } else if (men == 4) {
+      men = 3;
+    } else if (men == 3) {
+      men = 2;
+    } else if (men == 2) {
+      men = 1;
+    }
+  }
 }
