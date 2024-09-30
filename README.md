@@ -17,14 +17,5 @@ a little dev break (because change the lcd and board)
 - add more comments
 - add ok Button
 - add back Button
-  
-### v0.3
-- add lcd menu
-- add the forwButton
 
-### v0.2
-- add time over wifi
-
-### v0.1
-- add display
-- add temp sensor
+### more Changelog in the Wiki
