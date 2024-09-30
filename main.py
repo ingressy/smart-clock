@@ -1,12 +1,21 @@
-import time
-import board
-import digitalio
+import socket, subprocess
+from sys import platform
+from time import sleep
 
-led = digitalio.DigitalInOut(board.D17)
-led.direction = digitalio.Direction.OUTPUT
 
-while True:
-    led.value = True
-    time.sleep(0.1)
-    led.value = False
-    time.sleep(0.1)
+def start():
+    print("m~cat v0.4 DEV")
+    print("booting ...")
+
+    print(socket.gethostbyname(socket.gethostname()))
+    result = subprocess.run('iwgetid -r', capture_output=True, text=True, shell=True)
+    ssid = result.stdout.strip()
+
+    print(f"{ssid}")
+    sleep(5)
+
+def main():
+    start()
+
+if __name__ == "__main__":
+    main()
