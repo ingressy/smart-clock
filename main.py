@@ -2,6 +2,9 @@ import socket, subprocess
 from sys import platform
 from time import sleep
 
+mled = digitalio.DigitalInOut(board.D17)
+mled.direction = digitalio.Direction.OUTPUT
+
 
 def start():
     print("m~cat v0.4 DEV")
@@ -13,6 +16,9 @@ def start():
 
     print(f"{ssid}")
     sleep(5)
+
+    mled.value = True
+
 
 def main():
     start()
