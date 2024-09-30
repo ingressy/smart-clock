@@ -5,7 +5,7 @@ the mircocontrolled smart thing cat
 Text Comming soon
 
 ## Circuit Diagram
-here: [Circuit Diagramm](https://github.com/ingressy/m-cat/blob/main/m~cat.pdf)
+here: [Circuit Diagramm](https://github.com/ingressy/m-cat/blob/main/things/m~cat.pdf)
 
 ## Changelog
 a little dev break (because change the lcd and board)
