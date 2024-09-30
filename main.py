@@ -1,8 +1,7 @@
 import socket, subprocess
-from sys import platform
 from time import sleep
 
-mled = digitalio.DigitalInOut(board.D17)
+mled = digitalio.DigitalInOut(board.D29)
 mled.direction = digitalio.Direction.OUTPUT
 
 
