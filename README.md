@@ -8,8 +8,13 @@ Text Comming soon
 here: [Circuit Diagramm](https://github.com/ingressy/m-cat/blob/main/things/m~cat.pdf)
 
 ## Changelog
-a little dev break (because change the lcd and board)
-### v0.4 DEV
+
+### v0.4
+- Change the language to python
+- Change the mircocontroller to an Raspberry Pi Zero
+- Change the lcd to a E-Ink Display
+
+  
 - turns the m-led on by under 20°C Room Temperature
 - turns the m-led on by over 30°C Room Temperature
 - add weather lcd menu point
